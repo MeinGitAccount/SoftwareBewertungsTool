@@ -1,0 +1,97 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="templates/template.xhtml">
+
+    <ui:define name="content">
+        <f:view locale="DE">
+            <p:panel header="Fahrtenbuch (Administration)">
+                <h:form id="form1">
+                    <p:growl id="msgs" showDetail="true" sticky="true"/>
+
+                    <p:commandButton value="Kriterien" onclick="PF('criteriaDialog').show()" styleClass="ui-priority-primary" icon="pi pi-tag"/>
+
+                    <p:divider/>
+
+                    <p:commandButton action="#{criteriaView.addNewSoftware()}" update=":form1:software" value="Neue Software" styleClass="ui-button-plain" icon="pi pi-plus"/>
+
+                    <p:divider/>
+                    <p:dataTable id="software" var="soft" value="#{criteriaView.softwareList}" editable="true" style="margin-bottom:20px"
+                    scrollable="true" scrollRows="25" rowKey="#{soft.id}">
+                        <p:ajax event="rowEdit" listener="#{criteriaView.onRowEditSoftware}" update=":form1:software :form1:msgs" process="@this"/>
+                        <p:ajax event="rowEditCancel" listener="#{criteriaView.onRowCancelSoftware}" update=":form1:msgs"/>
+                        <p:ajax event="rowToggle" listener="#{criteriaView.onRowExpansion}" process="@this" update=":form1:software:ratings"/>
+                        <p:column>
+                            <p:rowToggler/>
+                        </p:column>
+                        <p:column headerText="ID" style="text-align: center;">
+                            <p:outputLabel value="#{soft.id}"/>
+                        </p:column>
+                        <p:column headerText="Name" style="text-align: center;">
+                            <p:cellEditor>
+                                <f:facet name="output"><p:outputLabel value="#{soft.name}"/></f:facet>
+                                <f:facet name="input"><p:inputText value="#{soft.name}" required="true" requiredMessage="Das Feld Name muss befüllt werden" style="width: 100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="width:32px" exportable="false">
+                            <p:rowEditor/>
+                        </p:column>
+                        <p:column exportable="false">
+                            <p:commandButton action="#{criteriaView.deleteSoftware(soft)}" update="@form" icon="pi pi-trash" style="background-color: red; border-color: red"/>
+                        </p:column>
+                        <p:rowExpansion>
+                            <p:dataTable id="ratings" var="critRating" value="#{soft.criteriaRatings}" editable="true" style="margin-bottom:20px"
+                                         scrollable="true" scrollRows="4">
+                                <p:column>
+                                    <p:outputLabel value="#{critRating.criteria.name}"/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputNumber minValue="1" maxValue="10" decimalPlaces="0" value="#{critRating.rating}"/>
+                                </p:column>
+                            </p:dataTable>
+                            <p:divider>
+                                <p:commandButton action="#{criteriaView.saveAllCritRatingsForSoftware(soft)}" value="Speichern" process="@form" update="@form" icon="pi pi-check"/>
+                            </p:divider>
+                        </p:rowExpansion>
+                    </p:dataTable>
+                </h:form>
+            </p:panel>
+        </f:view>
+
+        <p:dialog id="criteriaDialog" widgetVar="criteriaDialog" header="Neues Kriterium" closable="true" modal="true" width="750">
+            <h:form id="form2">
+                <p:commandButton action="#{criteriaView.addNewCriterium()}" update=":form2:criteria" value="Neues Kriterium" styleClass="ui-button-plain" icon="pi pi-plus"/>
+                <p:divider/>
+
+                <p:dataTable id="criteria" var="crit" value="#{criteriaView.criteriaList}" editable="true" style="margin-bottom:20px"
+                                scrollable="true" scrollRows="5">
+                    <p:ajax event="rowEdit" listener="#{criteriaView.onRowEditCriterium}" update=":form2:criteria :form1:msgs" process="@this"/>
+                    <p:ajax event="rowEditCancel" listener="#{criteriaView.onRowCancelCriterium}" update=":form1:msgs"/>
+                    <p:column headerText="ID" style="text-align: center;">
+                        <p:outputLabel value="#{crit.id}"/>
+                    </p:column>
+                    <p:column headerText="Name" style="text-align: center;">
+                        <p:cellEditor>
+                            <f:facet name="output"><p:outputLabel value="#{crit.name}"/></f:facet>
+                            <f:facet name="input"><p:inputText value="#{crit.name}" required="true" requiredMessage="Das Feld Name muss befüllt werden" style="width: 100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Gewichtung" style="text-align: center;">
+                        <p:cellEditor>
+                            <f:facet name="output"><p:outputLabel value="#{crit.importance}"/></f:facet>
+                            <f:facet name="input"><p:inputNumber value="#{crit.importance}" minValue="1" maxValue="10" required="true" requiredMessage="Das Feld Gewichtung muss befüllt werden." inputStyle="width: 100%;"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column style="width:32px" exportable="false">
+                        <p:rowEditor/>
+                    </p:column>
+                    <p:column exportable="false">
+                        <p:commandButton action="#{criteriaView.deleteCriteria(crit)}" update="@form" icon="pi pi-trash" style="background-color: red; border-color: red"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>
