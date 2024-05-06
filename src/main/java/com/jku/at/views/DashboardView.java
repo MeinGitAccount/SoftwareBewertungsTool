@@ -94,7 +94,7 @@ public class DashboardView implements Serializable {
         ChartData data = new ChartData();
 
         BarChartDataSet barDataSet = new BarChartDataSet();
-        barDataSet.setLabel("My First Dataset");
+        barDataSet.setLabel("Übersichts Daten");
 
         List<Number> values = new ArrayList<>();
         List<String> labels = new ArrayList<>();
@@ -144,7 +144,7 @@ public class DashboardView implements Serializable {
 
         Title title = new Title();
         title.setDisplay(true);
-        title.setText("Bar Chart");
+        title.setText("Bewertungen pro Software");
         options.setTitle(title);
 
         Legend legend = new Legend();

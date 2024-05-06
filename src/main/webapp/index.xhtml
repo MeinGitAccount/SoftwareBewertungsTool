@@ -7,47 +7,45 @@
 
     <ui:define name="content">
         <f:view locale="DE">
-            <p:panel header="Fahrtenbuch (Administration)">
+            <p:panel header="Datenbearbeitung und Eingabe">
                 <h:form id="form1">
                     <p:growl id="msgs" showDetail="true" sticky="true"/>
 
-                    <p:commandButton value="Kriterien" onclick="PF('criteriaDialog').show()" styleClass="ui-priority-primary" icon="pi pi-tag"/>
+                    <p:panelGrid columns="2" style="width: 30%">
+                        <p:commandButton value="Kriterien" onclick="PF('criteriaDialog').show()" styleClass="ui-priority-plain" icon="pi pi-tag"/>
+                        <p:commandButton action="#{criteriaView.addNewSoftware()}" update=":form1:software" value="Neue Software" styleClass="ui-button-plain" icon="pi pi-plus"/>
+                    </p:panelGrid>
 
                     <p:divider/>
-
-                    <p:commandButton action="#{criteriaView.addNewSoftware()}" update=":form1:software" value="Neue Software" styleClass="ui-button-plain" icon="pi pi-plus"/>
-
-                    <p:divider/>
-                    <p:dataTable id="software" var="soft" value="#{criteriaView.softwareList}" editable="true" style="margin-bottom:20px"
+                    <p:dataTable id="software" var="soft" value="#{criteriaView.softwareList}" editable="true" style="margin-bottom:20px; width: 100%;"
                     scrollable="true" scrollRows="25" rowKey="#{soft.id}">
                         <p:ajax event="rowEdit" listener="#{criteriaView.onRowEditSoftware}" update=":form1:software :form1:msgs" process="@this"/>
                         <p:ajax event="rowEditCancel" listener="#{criteriaView.onRowCancelSoftware}" update=":form1:msgs"/>
                         <p:ajax event="rowToggle" listener="#{criteriaView.onRowExpansion}" process="@this" update=":form1:software:ratings"/>
-                        <p:column>
+                        <p:column width="5%">
                             <p:rowToggler/>
                         </p:column>
-                        <p:column headerText="ID" style="text-align: center;">
+                        <p:column headerText="ID" style="text-align: center;" width="15%">
                             <p:outputLabel value="#{soft.id}"/>
                         </p:column>
-                        <p:column headerText="Name" style="text-align: center;">
+                        <p:column headerText="Name" style="text-align: center;" width="25%">
                             <p:cellEditor>
                                 <f:facet name="output"><p:outputLabel value="#{soft.name}"/></f:facet>
                                 <f:facet name="input"><p:inputText value="#{soft.name}" required="true" requiredMessage="Das Feld Name muss befüllt werden" style="width: 100%"/></f:facet>
                             </p:cellEditor>
                         </p:column>
-                        <p:column style="width:32px" exportable="false">
+                        <p:column exportable="false" width="5%">
                             <p:rowEditor/>
                         </p:column>
-                        <p:column exportable="false">
+                        <p:column exportable="false" width="5%">
                             <p:commandButton action="#{criteriaView.deleteSoftware(soft)}" update="@form" icon="pi pi-trash" style="background-color: red; border-color: red"/>
                         </p:column>
                         <p:rowExpansion>
-                            <p:dataTable id="ratings" var="critRating" value="#{soft.criteriaRatings}" editable="true" style="margin-bottom:20px"
-                                         scrollable="true" scrollRows="4">
-                                <p:column>
+                            <p:dataTable id="ratings" var="critRating" value="#{soft.criteriaRatings}" style="margin-bottom:20px; width: fit-content">
+                                <p:column width="50%">
                                     <p:outputLabel value="#{critRating.criteria.name}"/>
                                 </p:column>
-                                <p:column>
+                                <p:column width="50%">
                                     <p:inputNumber minValue="1" maxValue="10" decimalPlaces="0" value="#{critRating.rating}"/>
                                 </p:column>
                             </p:dataTable>
