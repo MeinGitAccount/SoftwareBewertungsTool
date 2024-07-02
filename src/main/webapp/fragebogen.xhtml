@@ -1,0 +1,213 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="templates/template.xhtml">
+
+    <ui:define name="content">
+        <f:view locale="DE">
+            <p:panel header="Software Entscheidungshilfe" style="text-align: center;">
+                <p:outputLabel style="font-size: xx-large; display: block; width:100%; text-align:center;">Buchhaltungs-Software:<br/>Entscheidungshilfe<br/></p:outputLabel>
+                <p:outputLabel style="font-size: large; display: block; width:100%; text-align:center; padding-top: 10px;">Beantworten Sie die folgenden 10 Fragen um einen Vorschlag für<br/>passende Buchhaltungs-Software zu bekommen.<br/></p:outputLabel>
+                <div style="text-align: center; padding-top: 20px;">
+                    <p:commandButton styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 5%" onclick="PF('FrageDialog1').show()" value="Start"/>
+                </div>
+            </p:panel>
+
+            <h:form id="form1">
+                <p:dialog id="Frage1" widgetVar="FrageDialog1" closable="false" modal="true" showEffect="fade" width="750">
+                    <f:facet name="header"><ui:include src="templates/dialogueMenu.xhtml"/></f:facet>
+                    <p:outputLabel style="width: 100%; font-weight: bold; font-size: larger">1. Welche Funktionen muss das Tool auf jeden Fall haben? (Anzahl beliebig)</p:outputLabel><br/><br/>
+                    <p:selectBooleanCheckbox style="padding-bottom:4px" value="#{fragebogenView.answerSet.einAusRechnung}" itemLabel="E/A-Rechnung"/><br/>
+                    <p:selectBooleanCheckbox style="padding-bottom:4px" value="#{fragebogenView.answerSet.guvRechnung}" itemLabel="GuV-Rechnung"/><br/>
+                    <p:selectBooleanCheckbox style="padding-bottom:4px" value="#{fragebogenView.answerSet.uvAnmeldung}" itemLabel="Umsatzsteuervoranmeldung"/><br/>
+                    <p:selectBooleanCheckbox style="padding-bottom:4px" value="#{fragebogenView.answerSet.lugVerrechnung}" itemLabel="Lohn- und Gehaltsverrechnung"/><br/>
+                    <p:selectBooleanCheckbox style="padding-bottom:4px" value="#{fragebogenView.answerSet.rumWesen}" itemLabel="Rechnungs- und Mahnwesen"/><br/>
+                    <p:selectBooleanCheckbox style="padding-bottom:4px" value="#{fragebogenView.answerSet.belegerfassung}" itemLabel="Belegerfassung"/><br/>
+                    <p:selectBooleanCheckbox style="padding-bottom:4px" value="#{fragebogenView.answerSet.elekRechnung}" itemLabel="E-Rechnung"/><br/>
+                    <p:selectBooleanCheckbox style="padding-bottom:4px" value="#{fragebogenView.answerSet.auswertungen}" itemLabel="Auswertungen/Reporting"/><br/>
+                    <p:selectBooleanCheckbox style="padding-bottom:4px" value="#{fragebogenView.answerSet.impExport}" itemLabel="Daten-Import/Export"/><br/>
+                    <p:selectBooleanCheckbox style="padding-bottom:4px" value="#{fragebogenView.answerSet.kassabuch}" itemLabel="Kassabuch"/><br/>
+                    <div style="text-align: center; padding-top: 20px;">
+                        <p:commandButton iconPos="right" icon="pi pi-angle-right" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 15%" onclick="PF('FrageDialog1').hide(); PF('FrageDialog2').show()" value="Weiter" />
+                    </div>
+                </p:dialog>
+                <p:dialog id="Frage2" widgetVar="FrageDialog2" closable="false" modal="true" width="750">
+                    <f:facet name="header"><ui:include src="templates/dialogueMenu.xhtml"/></f:facet>
+                    <p:outputLabel style="width: 100%; font-weight: bold; font-size: larger">2. Welche Schnittstellen sind unbedingt notwendig? (Anzahl beliebig)</p:outputLabel><br/><br/>
+                    <p:selectBooleanCheckbox style="padding-bottom:4px" value="#{fragebogenView.answerSet.apiBank}" itemLabel="Bank"/><br/>
+                    <p:selectBooleanCheckbox style="padding-bottom:4px" value="#{fragebogenView.answerSet.apiDatev}" itemLabel="Datev"/><br/>
+                    <p:selectBooleanCheckbox style="padding-bottom:4px" value="#{fragebogenView.answerSet.apiFinOn}" itemLabel="Finanz Online"/><br/>
+                    <p:selectBooleanCheckbox style="padding-bottom:4px" value="#{fragebogenView.answerSet.apiKunde}" itemLabel="Kundenschnittstelle"/><br/>
+                    <div style="text-align: center; padding-top: 20px;">
+                        <p:panelGrid columns="2" style="width: 40%; margin: 0 auto;">
+                            <p:commandButton iconPos="left" icon="pi pi-angle-left" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog2').hide(); PF('FrageDialog1').show()" value="Zurück" />
+                            <p:commandButton iconPos="right" icon="pi pi-angle-right" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog2').hide(); PF('FrageDialog3').show()" value="Weiter" />
+                        </p:panelGrid>
+                    </div>
+                </p:dialog>
+                <p:dialog id="Frage3" widgetVar="FrageDialog3" closable="false" modal="true" width="750">
+                    <f:facet name="header"><ui:include src="templates/dialogueMenu.xhtml"/></f:facet>
+                    <p:outputLabel style="width: 100%; font-weight: bold; font-size: larger">3. Wie wichtig ist Ihnen eine automatisierte Belegerfassung?</p:outputLabel><br/><br/>
+                        <p:selectOneRadio layout="pageDirection" requiredMessage="Es muss eine Option ausgewählt werden" required="true" value="#{fragebogenView.answerSet.autoBelegerfassung}">
+                            <f:selectItems value="#{fragebogenView.selectItems}"/>
+                        </p:selectOneRadio>
+                        <div style="text-align: center; padding-top: 20px;">
+                            <p:panelGrid columns="2" style="width: 40%; margin: 0 auto;">
+                                <p:commandButton iconPos="left" icon="pi pi-angle-left" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog3').hide(); PF('FrageDialog2').show()" value="Zurück" />
+                                <p:commandButton iconPos="right" icon="pi pi-angle-right" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog3').hide(); PF('FrageDialog4').show()" value="Weiter" />
+                            </p:panelGrid>
+                        </div>
+                </p:dialog>
+                <p:dialog id="Frage4" widgetVar="FrageDialog4" closable="false" modal="true" width="750">
+                    <f:facet name="header"><ui:include src="templates/dialogueMenu.xhtml"/></f:facet>
+                    <p:outputLabel style="width: 100%; font-weight: bold; font-size: larger">4. Wie wichtig ist Ihnen die Kontrolle Ihrer Eingaben durch das Tool?</p:outputLabel><br/><br/>
+                    <p:selectOneRadio layout="pageDirection" requiredMessage="Es muss eine Option ausgewählt werden" required="true" value="#{fragebogenView.answerSet.eingabenkontrolle}">
+                        <f:selectItems value="#{fragebogenView.selectItems}"/>
+                    </p:selectOneRadio>
+                    <div style="text-align: center; padding-top: 20px;">
+                        <p:panelGrid columns="2" style="width: 40%; margin: 0 auto;">
+                            <p:commandButton iconPos="left" icon="pi pi-angle-left" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog4').hide(); PF('FrageDialog3').show()" value="Zurück" />
+                            <p:commandButton iconPos="right" icon="pi pi-angle-right" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog4').hide(); PF('FrageDialog5').show()" value="Weiter" />
+                        </p:panelGrid>
+                    </div>
+                </p:dialog>
+                <p:dialog id="Frage5" widgetVar="FrageDialog5" closable="false" modal="true" width="750">
+                    <f:facet name="header"><ui:include src="templates/dialogueMenu.xhtml"/></f:facet>
+                    <p:outputLabel style="width: 100%; font-weight: bold; font-size: larger">5. Wie wichtig ist Ihnen Künstliche Intelligenz als Unterstützung bei der Benutzung?</p:outputLabel><br/><br/>
+                    <p:selectOneRadio layout="pageDirection" requiredMessage="Es muss eine Option ausgewählt werden" required="true" value="#{fragebogenView.answerSet.kiSupport}">
+                        <f:selectItems value="#{fragebogenView.selectItems}"/>
+                    </p:selectOneRadio>
+                    <div style="text-align: center; padding-top: 20px;">
+                        <p:panelGrid columns="2" style="width: 40%; margin: 0 auto;">
+                            <p:commandButton iconPos="left" icon="pi pi-angle-left" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog5').hide(); PF('FrageDialog4').show()" value="Zurück" />
+                            <p:commandButton iconPos="right" icon="pi pi-angle-right" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog5').hide(); PF('FrageDialog6').show()" value="Weiter" />
+                        </p:panelGrid>
+                    </div>
+                </p:dialog>
+                <p:dialog id="Frage6" widgetVar="FrageDialog6" closable="false" modal="true" width="750">
+                    <f:facet name="header"><ui:include src="templates/dialogueMenu.xhtml"/></f:facet>
+                    <p:outputLabel style="width: 100%; font-weight: bold; font-size: larger">6. Wie wichtig sind Ihnen vom Softwarehersteller angebotener Support?</p:outputLabel><br/><br/>
+                    <p:selectOneRadio layout="pageDirection" requiredMessage="Es muss eine Option ausgewählt werden" required="true" value="#{fragebogenView.answerSet.kundFreundSupp}">
+                        <f:selectItems value="#{fragebogenView.selectItems}"/>
+                    </p:selectOneRadio>
+                    <div style="text-align: center; padding-top: 20px;">
+                        <p:panelGrid columns="2" style="width: 40%; margin: 0 auto;">
+                            <p:commandButton iconPos="left" icon="pi pi-angle-left" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog6').hide(); PF('FrageDialog5').show()" value="Zurück" />
+                            <p:commandButton iconPos="right" icon="pi pi-angle-right" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog6').hide(); PF('FrageDialog7').show()" value="Weiter" />
+                        </p:panelGrid>
+                    </div>
+                </p:dialog>
+                <p:dialog id="Frage7" widgetVar="FrageDialog7" closable="false" modal="true" width="750">
+                    <f:facet name="header"><ui:include src="templates/dialogueMenu.xhtml"/></f:facet>
+                    <p:outputLabel style="width: 100%; font-weight: bold; font-size: larger">7. Wie wichtig sind Ihnen vom Softwarehersteller angebotene Schulungen?</p:outputLabel><br/><br/>
+                    <p:selectOneRadio layout="pageDirection" requiredMessage="Es muss eine Option ausgewählt werden" required="true" value="#{fragebogenView.answerSet.kundFreundSchulungen}">
+                        <f:selectItems value="#{fragebogenView.selectItems}"/>
+                    </p:selectOneRadio>
+                    <div style="text-align: center; padding-top: 20px;">
+                        <p:panelGrid columns="2" style="width: 40%; margin: 0 auto;">
+                            <p:commandButton iconPos="left" icon="pi pi-angle-left" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog7').hide(); PF('FrageDialog6').show()" value="Zurück" />
+                            <p:commandButton iconPos="right" icon="pi pi-angle-right" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog7').hide(); PF('FrageDialog8').show()" value="Weiter" />
+                        </p:panelGrid>
+                    </div>
+                </p:dialog>
+                <p:dialog id="Frage8" widgetVar="FrageDialog8" closable="false" modal="true" width="750">
+                    <f:facet name="header"><ui:include src="templates/dialogueMenu.xhtml"/></f:facet>
+                    <p:outputLabel style="width: 100%; font-weight: bold; font-size: larger">8. Wie wichtig ist Ihnen eine moderne Benutzeroberfläche?</p:outputLabel><br/><br/>
+                    <p:selectOneRadio layout="pageDirection" requiredMessage="Es muss eine Option ausgewählt werden" required="true" value="#{fragebogenView.answerSet.kundFreundUI}">
+                        <f:selectItems value="#{fragebogenView.selectItems}"/>
+                    </p:selectOneRadio>
+                    <div style="text-align: center; padding-top: 20px;">
+                        <p:panelGrid columns="2" style="width: 40%; margin: 0 auto;">
+                            <p:commandButton iconPos="left" icon="pi pi-angle-left" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog8').hide(); PF('FrageDialog7').show()" value="Zurück" />
+                            <p:commandButton iconPos="right" icon="pi pi-angle-right" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog8').hide(); PF('FrageDialog9').show()" value="Weiter" />
+                        </p:panelGrid>
+                    </div>
+                </p:dialog>
+                <p:dialog id="Frage9" widgetVar="FrageDialog9" closable="false" modal="true" width="750">
+                    <f:facet name="header"><ui:include src="templates/dialogueMenu.xhtml"/></f:facet>
+                    <p:outputLabel style="width: 100%; font-weight: bold; font-size: larger">9. Wie wichtig ist es Ihnen die Software am Handy / Tablet verwenden zu können?</p:outputLabel><br/><br/>
+                    <p:selectOneRadio layout="pageDirection" requiredMessage="Es muss eine Option ausgewählt werden" required="true" value="#{fragebogenView.answerSet.kosten}">
+                        <f:selectItems value="#{fragebogenView.selectItems}"/>
+                    </p:selectOneRadio>
+                    <div style="text-align: center; padding-top: 20px;">
+                        <p:panelGrid columns="2" style="width: 40%; margin: 0 auto;">
+                            <p:commandButton iconPos="left" icon="pi pi-angle-left" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog9').hide(); PF('FrageDialog8').show()" value="Zurück" />
+                            <p:commandButton iconPos="right" icon="pi pi-angle-right" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog9').hide(); PF('FrageDialog10').show()" value="Weiter" process=":form1" />
+                        </p:panelGrid>
+                    </div>
+                </p:dialog>
+                <p:dialog id="Frage10" widgetVar="FrageDialog10" closable="false" modal="true" width="750">
+                    <f:facet name="header"><ui:include src="templates/dialogueMenu.xhtml"/></f:facet>
+                    <p:outputLabel style="width: 100%; font-weight: bold; font-size: larger">10. Wie wichtig sind die Kosten der Software</p:outputLabel><br/><br/>
+                    <p:selectOneRadio layout="pageDirection" requiredMessage="Es muss eine Option ausgewählt werden" required="true" value="#{fragebogenView.answerSet.kundFreundHandyNutzung}">
+                        <f:selectItems value="#{fragebogenView.selectItems}"/>
+                    </p:selectOneRadio>
+                    <div style="text-align: center; padding-top: 20px;">
+                        <p:panelGrid columns="2" style="width: 40%; margin: 0 auto;">
+                            <p:commandButton iconPos="left" icon="pi pi-angle-left" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog10').hide(); PF('FrageDialog9').show()" value="Zurück" />
+                            <p:commandButton iconPos="right" icon="pi pi-angle-right" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('FrageDialog10').hide();" value="Weiter" action="#{fragebogenView.initErgebnis()}" process=":form1" update=":form2" />
+                        </p:panelGrid>
+                    </div>
+                </p:dialog>
+            </h:form>
+            <h:form id="form2">
+                <p:dialog id="Abschluss" widgetVar="AbschlussDialog" closable="false" modal="true" width="750" hideEffect="fade">
+                    <f:facet name="header"><ui:include src="templates/dialogueMenu.xhtml"/></f:facet>
+                    <p:scrollPanel style="width:100%;height:700px;border: none;">
+                        <p:outputLabel style="width: 100%; font-weight: bold; font-size: larger">Übersicht</p:outputLabel><br/><br/>
+                        <p:divider><p:outputLabel style="width: 100%; font-weight: bold; font-size: medium;">Funktionsumfang</p:outputLabel></p:divider>
+                        <p:selectBooleanCheckbox style="padding-bottom:4px" disabled="true" value="#{fragebogenView.answerSet.einAusRechnung}" itemLabel="E/A-Rechnung"/><br/>
+                        <p:selectBooleanCheckbox style="padding-bottom:4px" disabled="true" value="#{fragebogenView.answerSet.guvRechnung}" itemLabel="GuV-Rechnung"/><br/>
+                        <p:selectBooleanCheckbox style="padding-bottom:4px" disabled="true" value="#{fragebogenView.answerSet.uvAnmeldung}" itemLabel="Umsatzsteuervoranmeldung"/><br/>
+                        <p:selectBooleanCheckbox style="padding-bottom:4px" disabled="true" value="#{fragebogenView.answerSet.lugVerrechnung}" itemLabel="Lohn- und Gehaltsverrechnung"/><br/>
+                        <p:selectBooleanCheckbox style="padding-bottom:4px" disabled="true" value="#{fragebogenView.answerSet.rumWesen}" itemLabel="Rechnungs- und Mahnwesen"/><br/>
+                        <p:selectBooleanCheckbox style="padding-bottom:4px" disabled="true" value="#{fragebogenView.answerSet.belegerfassung}" itemLabel="Belegerfassung"/><br/>
+                        <p:selectBooleanCheckbox style="padding-bottom:4px" disabled="true" value="#{fragebogenView.answerSet.elekRechnung}" itemLabel="E-Rechnung"/><br/>
+                        <p:selectBooleanCheckbox style="padding-bottom:4px" disabled="true" value="#{fragebogenView.answerSet.auswertungen}" itemLabel="Auswertungen/Reporting"/><br/>
+                        <p:selectBooleanCheckbox style="padding-bottom:4px" disabled="true" value="#{fragebogenView.answerSet.impExport}" itemLabel="Daten-Import/Export"/><br/>
+                        <p:selectBooleanCheckbox style="padding-bottom:4px" disabled="true" value="#{fragebogenView.answerSet.kassabuch}" itemLabel="Kassabuch"/><br/>
+
+                        <p:divider><p:outputLabel style="width: 100%; font-weight: bold; font-size: medium;">Schnittstellen</p:outputLabel></p:divider>
+                        <p:selectBooleanCheckbox style="padding-bottom:4px" disabled="true" value="#{fragebogenView.answerSet.apiBank}" itemLabel="Bank"/><br/>
+                        <p:selectBooleanCheckbox style="padding-bottom:4px" disabled="true" value="#{fragebogenView.answerSet.apiDatev}" itemLabel="Datev"/><br/>
+                        <p:selectBooleanCheckbox style="padding-bottom:4px" disabled="true" value="#{fragebogenView.answerSet.apiFinOn}" itemLabel="Finanz Online"/><br/>
+                        <p:selectBooleanCheckbox style="padding-bottom:4px" disabled="true" value="#{fragebogenView.answerSet.apiKunde}" itemLabel="Kundenschnittstelle"/><br/>
+                        <p:divider><p:outputLabel style="width: 100%; font-weight: bold; font-size: medium;">Funktionen</p:outputLabel></p:divider>
+                        <p:panelGrid columns="2">
+                            <p:outputLabel>Automatisierte Belegerfassung</p:outputLabel>
+                            <p:outputLabel value="#{fragebogenView.getIntRatingAsString(fragebogenView.answerSet.autoBelegerfassung)}"/>
+                            <p:outputLabel>Eingabenkontrolle</p:outputLabel>
+                            <p:outputLabel value="#{fragebogenView.getIntRatingAsString(fragebogenView.answerSet.eingabenkontrolle)}"/>
+                            <p:outputLabel>KI Unterstützung</p:outputLabel>
+                            <p:outputLabel value="#{fragebogenView.getIntRatingAsString(fragebogenView.answerSet.kiSupport)}"/>
+                        </p:panelGrid>
+                        <p:divider><p:outputLabel style="width: 100%; font-weight: bold; font-size: medium;">Kundenfreundlichkeit</p:outputLabel></p:divider>
+                        <p:panelGrid columns="2">
+                            <p:outputLabel>Support vom Softwareanbieter</p:outputLabel>
+                            <p:outputLabel value="#{fragebogenView.getIntRatingAsString(fragebogenView.answerSet.kundFreundSupp)}"/>
+                            <p:outputLabel>Schulungen vom Softwareanbieter</p:outputLabel>
+                            <p:outputLabel value="#{fragebogenView.getIntRatingAsString(fragebogenView.answerSet.kundFreundSchulungen)}"/>
+                            <p:outputLabel>Benutzeroberfläche</p:outputLabel>
+                            <p:outputLabel value="#{fragebogenView.getIntRatingAsString(fragebogenView.answerSet.kundFreundUI)}"/>
+                            <p:outputLabel>Handy/Tablet-Nutzung</p:outputLabel>
+                            <p:outputLabel value="#{fragebogenView.getIntRatingAsString(fragebogenView.answerSet.kundFreundHandyNutzung)}"/>
+                        </p:panelGrid>
+                        <p:divider><p:outputLabel style="width: 100%; font-weight: bold; font-size: medium;">Kosten</p:outputLabel></p:divider>
+                        <p:panelGrid columns="2">
+                            <p:outputLabel>Kosten</p:outputLabel>
+                            <p:outputLabel value="#{fragebogenView.getIntRatingAsString(fragebogenView.answerSet.kosten)}"/>
+                        </p:panelGrid>
+                    </p:scrollPanel>
+                    <div style="text-align: center; padding-top: 20px;">
+                        <p:panelGrid columns="2" style="width: 40%; margin: 0 auto;">
+                            <p:commandButton iconPos="left" icon="pi pi-angle-left" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" onclick="PF('AbschlussDialog').hide(); PF('FrageDialog10').show()" value="Zurück" />
+                            <p:button iconPos="left" icon="pi pi-check" styleClass="ui-button-plain" style="color: White; background-color: red; border-color: red; width: 100%" outcome="ratingsOverview.xhtml" value="Fertig"/>
+                        </p:panelGrid>
+                    </div>
+                </p:dialog>
+            </h:form>
+        </f:view>
+    </ui:define>
+</ui:composition>

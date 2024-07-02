@@ -12,5 +12,7 @@ public interface SoftwareService {
 
     void delete(Software software);
 
+    Software findByName(String name);
+
     List<Software> findAll();
 }

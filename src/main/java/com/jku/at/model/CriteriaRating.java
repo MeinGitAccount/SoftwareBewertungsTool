@@ -20,18 +20,21 @@ public class CriteriaRating {
     @Setter
     private Integer rating;
 
-    @ManyToOne
+    @Getter
+    private String criteriaName;
+
     @Getter
     @Setter
-    private Criteria criteria;
+    @Column(length = 500)
+    private String description;
 
     @ManyToOne
     @Getter
     @Setter
     private Software software;
 
-    public CriteriaRating(Criteria criteria, Software software) {
-        this.criteria = criteria;
+    public CriteriaRating(String name, Software software) {
+        this.criteriaName = name;
         this.software = software;
         rating = 0;
     }
@@ -39,7 +42,7 @@ public class CriteriaRating {
 
     @Override
     public int hashCode() {
-        return rating * criteria.getId() * software.getId();
+        return rating * criteriaName.hashCode() * software.getId();
     }
 
     @Override
@@ -51,6 +54,6 @@ public class CriteriaRating {
 
     @Override
     public String toString() {
-        return criteria.getName() + " rated " + rating + " for " + software.getName();
+        return criteriaName + " rated " + rating + " for " + software.getName();
     }
 }

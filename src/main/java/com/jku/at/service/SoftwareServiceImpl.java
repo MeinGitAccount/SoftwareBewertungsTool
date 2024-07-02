@@ -27,4 +27,9 @@ public class SoftwareServiceImpl implements SoftwareService {
     public List<Software> findAll() {
         return repository.findAll();
     }
+
+    @Override
+    public Software findByName(String name) {
+        return repository.findByName(name);
+    }
 }

@@ -3,6 +3,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+
                 template="templates/template.xhtml">
 
     <ui:define name="content">
@@ -10,18 +11,12 @@
             <p:panel header="Datenbearbeitung und Eingabe">
                 <h:form id="form1">
                     <p:growl id="msgs" showDetail="true" sticky="true"/>
-
-                    <p:panelGrid columns="2" style="width: 30%">
-                        <p:commandButton value="Kriterien" onclick="PF('criteriaDialog').show()" styleClass="ui-priority-plain" icon="pi pi-tag"/>
-                        <p:commandButton action="#{criteriaView.addNewSoftware()}" update=":form1:software" value="Neue Software" styleClass="ui-button-plain" icon="pi pi-plus"/>
-                    </p:panelGrid>
-
+                    <p:commandButton action="#{criteriaView.addNewSoftware()}" update=":form1:software" value="Neue Software" styleClass="ui-button-plain" icon="pi pi-plus"/>
                     <p:divider/>
                     <p:dataTable id="software" var="soft" value="#{criteriaView.softwareList}" editable="true" style="margin-bottom:20px; width: 100%;"
                     scrollable="true" scrollRows="25" rowKey="#{soft.id}">
                         <p:ajax event="rowEdit" listener="#{criteriaView.onRowEditSoftware}" update=":form1:software :form1:msgs" process="@this"/>
                         <p:ajax event="rowEditCancel" listener="#{criteriaView.onRowCancelSoftware}" update=":form1:msgs"/>
-                        <p:ajax event="rowToggle" listener="#{criteriaView.onRowExpansion}" process="@this" update=":form1:software:ratings"/>
                         <p:column width="5%">
                             <p:rowToggler/>
                         </p:column>
@@ -41,55 +36,76 @@
                             <p:commandButton action="#{criteriaView.deleteSoftware(soft)}" update="@form" icon="pi pi-trash" style="background-color: red; border-color: red"/>
                         </p:column>
                         <p:rowExpansion>
-                            <p:dataTable id="ratings" var="critRating" value="#{soft.criteriaRatings}" style="margin-bottom:20px; width: fit-content">
-                                <p:column width="50%">
-                                    <p:outputLabel value="#{critRating.criteria.name}"/>
+                            <p:outputLabel style="font-weight: bold; font-size:large; width:100%;text-align: center">Funktionsumfang</p:outputLabel>
+
+                            <p:panelGrid columns="6">
+                                <p:selectBooleanCheckbox value="#{soft.einAusRechnung}" itemLabel="E/A-Rechnung"/>
+                                <p:selectBooleanCheckbox value="#{soft.guvRechnung}" itemLabel="GuV-Rechnung"/>
+                                <p:selectBooleanCheckbox value="#{soft.uvAnmeldung}" itemLabel="Umsatzsteuervoranmeldung"/>
+                                <p:selectBooleanCheckbox value="#{soft.lugVerrechnung}" itemLabel="Lohn- und Gehaltsverrechnung"/>
+                                <p:selectBooleanCheckbox value="#{soft.rumWesen}" itemLabel="Rechnungs- und Mahnwesen"/>
+                                <p:selectBooleanCheckbox value="#{soft.belegerfassung}" itemLabel="Belegerfassung"/>
+
+                                <p:selectBooleanCheckbox value="#{soft.elekRechnung}" itemLabel="E-Rechnung"/>
+                                <p:selectBooleanCheckbox value="#{soft.auswertungen}" itemLabel="Auswertungen/Reporting"/>
+                                <p:selectBooleanCheckbox value="#{soft.impExport}" itemLabel="Daten-Import/Export"/>
+                                <p:selectBooleanCheckbox value="#{soft.kassabuch}" itemLabel="Kassabuch"/>
+                            </p:panelGrid>
+                            <p:divider />
+                            <p:outputLabel style="font-weight: bold; font-size:large; width:100%;text-align: center">Automatisierung</p:outputLabel>
+                            <p:panelGrid columns="4">
+                                <p:selectBooleanCheckbox value="#{soft.autoBelegerfassung}" itemLabel="Automatische Belegerfassung"/>
+                                <p:selectBooleanCheckbox value="#{soft.eingabenkontrolle}" itemLabel="Eingabekontrolle"/>
+                                <p:selectBooleanCheckbox value="#{soft.kiSupport}" itemLabel="KI-Unterstützung"/>
+                            </p:panelGrid>
+                            <p:divider />
+                            <p:outputLabel style="font-weight: bold; font-size:large; width:100%;text-align: center">Schnittstellen</p:outputLabel>
+                            <p:panelGrid columns="4">
+                                <p:selectBooleanCheckbox value="#{soft.apiBank}" itemLabel="Bank"/>
+                                <p:selectBooleanCheckbox value="#{soft.apiDatev}" itemLabel="Datev"/>
+                                <p:selectBooleanCheckbox value="#{soft.apiFinOn}" itemLabel="Finanz Online"/>
+                                <p:selectBooleanCheckbox value="#{soft.apiKunde}" itemLabel="Kundenschnittstelle"/>
+                                <p:column style="text-align: left">
+                                <p:outputLabel value="Anzahl der Schnittstellen" style="padding-right: 25px" />
+                                <p:inputNumber minValue="0" value="#{soft.apiCount}"/>
                                 </p:column>
-                                <p:column width="50%">
-                                    <p:inputNumber minValue="1" maxValue="10" decimalPlaces="0" value="#{critRating.rating}"/>
+                            </p:panelGrid>
+                            <p:divider />
+                            <p:outputLabel style="font-weight: bold; font-size:large; width:100%;text-align: center">Kundenfreundlichkeit</p:outputLabel>
+                            <p:panelGrid columns="4">
+                                <p:selectBooleanCheckbox value="#{soft.kundFreundSupp}" itemLabel="Support"/>
+                                <p:selectBooleanCheckbox value="#{soft.kundFreundSchulungen}" itemLabel="Schulungen"/>
+                                <p:selectBooleanCheckbox value="#{soft.kundFreundUI}" itemLabel="Benutzeroberfläche"/>
+                                <p:selectBooleanCheckbox value="#{soft.kundFreundHandyNutzung}" itemLabel="Handynutzung"/>
+                            </p:panelGrid>
+
+                            <p:divider><p:outputLabel style="font-weight: bold; font-size:large; width:100%;text-align: center">Kosten</p:outputLabel></p:divider>
+
+                            <p:panelGrid columns="4">
+                                <p:selectBooleanCheckbox value="#{soft.kosten}" itemLabel="Kosten"/>
+                            </p:panelGrid>
+                            <p:divider />
+                            <p:outputLabel style="font-weight: bold; font-size:large; width:100%;text-align: center">Kriterien</p:outputLabel>
+                            <p:dataTable value="#{soft.criteriaRatings}" var="cr">
+                                <p:column headerText="Name" width="20%">
+                                    <p:outputLabel value="#{cr.criteriaName}"/>
+                                </p:column>
+                                <p:column headerText="Bewertung" width="20%">
+                                    <p:inputNumber minValue="0" maxValue="5" value="#{cr.rating}"/>
+                                </p:column>
+                                <p:column headerText="Beschreibung" width="60%">
+                                    <p:inputTextarea style="width: 100%" value="#{cr.description}"/>
                                 </p:column>
                             </p:dataTable>
-                            <p:divider>
-                                <p:commandButton action="#{criteriaView.saveAllCritRatingsForSoftware(soft)}" value="Speichern" process="@form" update="@form" icon="pi pi-check"/>
-                            </p:divider>
+
+                            <p:divider><p:outputLabel style="font-weight: bold; font-size:large; width:100%;text-align: center">Beschreibung</p:outputLabel></p:divider>
+                            <p:inputTextarea value="#{soft.beschreibung}" style="width:50%"/>
+                            <p:divider />
+                            <p:commandButton onclick="#{criteriaView.saveSoftware(soft)}" process=":form1" update="@all" value="Speichern" styleClass="ui-button-plain" icon="pi-pi-save" />
                         </p:rowExpansion>
                     </p:dataTable>
                 </h:form>
             </p:panel>
         </f:view>
-
-        <p:dialog id="criteriaDialog" widgetVar="criteriaDialog" header="Neues Kriterium" closable="true" modal="true" width="750">
-            <h:form id="form2">
-                <p:commandButton action="#{criteriaView.addNewCriterium()}" update=":form2:criteria" value="Neues Kriterium" styleClass="ui-button-plain" icon="pi pi-plus"/>
-                <p:divider/>
-
-                <p:dataTable id="criteria" var="crit" value="#{criteriaView.criteriaList}" editable="true" style="margin-bottom:20px"
-                                scrollable="true" scrollRows="5">
-                    <p:ajax event="rowEdit" listener="#{criteriaView.onRowEditCriterium}" update=":form2:criteria :form1:msgs" process="@this"/>
-                    <p:ajax event="rowEditCancel" listener="#{criteriaView.onRowCancelCriterium}" update=":form1:msgs"/>
-                    <p:column headerText="ID" style="text-align: center;">
-                        <p:outputLabel value="#{crit.id}"/>
-                    </p:column>
-                    <p:column headerText="Name" style="text-align: center;">
-                        <p:cellEditor>
-                            <f:facet name="output"><p:outputLabel value="#{crit.name}"/></f:facet>
-                            <f:facet name="input"><p:inputText value="#{crit.name}" required="true" requiredMessage="Das Feld Name muss befüllt werden" style="width: 100%"/></f:facet>
-                        </p:cellEditor>
-                    </p:column>
-                    <p:column headerText="Gewichtung" style="text-align: center;">
-                        <p:cellEditor>
-                            <f:facet name="output"><p:outputLabel value="#{crit.importance}"/></f:facet>
-                            <f:facet name="input"><p:inputNumber value="#{crit.importance}" minValue="1" maxValue="10" required="true" requiredMessage="Das Feld Gewichtung muss befüllt werden." inputStyle="width: 100%;"/></f:facet>
-                        </p:cellEditor>
-                    </p:column>
-                    <p:column style="width:32px" exportable="false">
-                        <p:rowEditor/>
-                    </p:column>
-                    <p:column exportable="false">
-                        <p:commandButton action="#{criteriaView.deleteCriteria(crit)}" update="@form" icon="pi pi-trash" style="background-color: red; border-color: red"/>
-                    </p:column>
-                </p:dataTable>
-            </h:form>
-        </p:dialog>
     </ui:define>
 </ui:composition>
